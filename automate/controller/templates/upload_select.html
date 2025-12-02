@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}Select Video{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+  <h1 class="h2">Upload: {{ category }}</h1>
+</div>
+
+<div class="card shadow-sm">
+    <div class="card-header bg-white">
+        <h5 class="mb-0">Select a video to upload</h5>
+        <small class="text-muted">Source: {{ source_dir }}</small>
+    </div>
+    <div class="list-group list-group-flush">
+        {% if not files %}
+            <div class="list-group-item text-center text-muted py-5">
+                <i class="bi bi-folder2-open fs-1"></i><br>
+                No video files found in the source directory.
+            </div>
+        {% else %}
+            {% for file in files %}
+            <div class="list-group-item d-flex justify-content-between align-items-center">
+                <div class="d-flex align-items-center">
+                    <i class="bi bi-file-earmark-play-fill fs-3 text-primary me-3"></i>
+                    <div>
+                        <strong>{{ file }}</strong>
+                    </div>
+                </div>
+                <a href="{{ url_for('upload_review', category=category, filename=file) }}" class="btn btn-primary btn-sm">
+                    Select & Review <i class="bi bi-arrow-right ms-1"></i>
+                </a>
+            </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+    <div class="card-footer">
+        <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">Back to Dashboard</a>
+    </div>
+</div>
+{% endblock %}

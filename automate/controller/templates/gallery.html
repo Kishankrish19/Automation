@@ -1,0 +1,157 @@
+{% extends "base.html" %}
+
+{% block title %}Media Gallery{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+  <h1 class="h2">Media Gallery</h1>
+</div>
+
+<p class="text-muted">A central place to view, preview, and delete media from all project folders.</p>
+
+{% if not media_folders %}
+<div class="alert alert-warning" role="alert">
+  No media folders could be found or scanned. Check your `controller.json` configuration.
+</div>
+{% endif %}
+
+{% for folder in media_folders %}
+<div class="card shadow-sm mb-4">
+  <div class="card-header d-flex justify-content-between align-items-center">
+    <div>
+      <h5 class="mb-0">{{ folder.name }}</h5>
+      <code class="small text-muted">{{ folder.path }}</code>
+    </div>
+    <span class="badge bg-primary rounded-pill">{{ folder.files|length }} files</span>
+  </div>
+  <div class="card-body">
+    {% if not folder.files %}
+    <p class="text-muted text-center">No media files found in this directory.</p>
+    {% else %}
+    <div class="row g-2">
+      {% for file in folder.files %}
+      <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6">
+        <div class="card h-100">
+          
+          {% if file.type == 'image' %}
+          <a href="#" data-bs-toggle="modal" data-bs-target="#imageModal" data-image-src="{{ url_for('serve_media_file', path=file.url_path) }}" data-image-title="{{ file.name }}">
+            <img src="{{ url_for('serve_media_file', path=file.url_path) }}" class="card-img-top" alt="{{ file.name }}" style="aspect-ratio: 1 / 1; object-fit: cover;">
+          </a>
+          {% elif file.type == 'video' %}
+          <a href="#" data-bs-toggle="modal" data-bs-target="#videoModal" data-video-src="{{ url_for('serve_media_file', path=file.url_path) }}" data-video-title="{{ file.name }}" class="d-flex align-items-center justify-content-center bg-dark" style="aspect-ratio: 1 / 1; object-fit: cover;">
+              <i class="bi bi-play-circle-fill text-white" style="font-size: 3rem; opacity: 0.7;"></i>
+          </a>
+          {% elif file.type == 'audio' %}
+          <div class="d-flex align-items-center justify-content-center bg-light" style="aspect-ratio: 1 / 1; object-fit: cover;">
+            <i class="bi bi-file-earmark-music" style="font-size: 3rem; opacity: 0.7;"></i>
+          </div>
+          {% else %}
+          <div class="d-flex align-items-center justify-content-center bg-light" style="aspect-ratio: 1 / 1; object-fit: cover;">
+            <i class="bi bi-file-earmark" style="font-size: 3rem; opacity: 0.7;"></i>
+          </div>
+          {% endif %}
+          
+          <div class="card-body p-2">
+            {% if file.type == 'audio' %}
+              <audio controls preload="metadata" class="w-100" style="max-height: 54px; min-width: 100%;">
+                <source src="{{ url_for('serve_media_file', path=file.url_path) }}" type="audio/mpeg">
+                Your browser does not support the audio element.
+              </audio>
+            {% else %}
+              <p class="card-text small text-truncate mb-1" title="{{ file.name }}">
+                {% if file.type == 'image' %}<i class="bi bi-image me-1"></i>
+                {% elif file.type == 'video' %}<i class="bi bi-film me-1"></i>
+                {% else %}<i class="bi bi-file-earmark me-1"></i>
+                {% endif %}
+                {{ file.name }}
+              </p>
+            {% endif %}
+          </div>
+          <div class="card-footer p-2 d-flex justify-content-end">
+            <form method="POST" action="{{ url_for('delete_media') }}" onsubmit="return confirm('Are you sure you want to delete {{ file.name }}? {% if file.smart_delete %}This will also delete associated files and JSON entries.{% endif %}');">
+              <input type="hidden" name="file_path" value="{{ file.full_path }}">
+              <button type="submit" class="btn btn-outline-danger btn-sm" title="Delete File">
+                <i class="bi bi-trash"></i>
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+  </div>
+</div>
+{% endfor %}
+
+
+<div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="imageModalLabel">Image Preview</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body text-center">
+        <img src="" class="img-fluid" id="modal-image-src" alt="Preview" style="max-height: 80vh;">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="videoModal" tabindex="-1" aria-labelledby="videoModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="videoModalLabel">Video Preview</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <video src="" id="modal-video-src" class="w-100" controls autoplay style="max-height: 80vh;"></video>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+// --- Image Modal Script ---
+const imageModal = document.getElementById('imageModal');
+imageModal.addEventListener('show.bs.modal', event => {
+  const button = event.relatedTarget;
+  const imageUrl = button.getAttribute('data-image-src');
+  const imageTitle = button.getAttribute('data-image-title');
+  
+  const modalTitle = imageModal.querySelector('.modal-title');
+  const modalImage = imageModal.querySelector('#modal-image-src');
+  
+  modalTitle.textContent = imageTitle;
+  modalImage.src = imageUrl;
+});
+imageModal.addEventListener('hide.bs.modal', event => {
+  const modalImage = imageModal.querySelector('#modal-image-src');
+  modalImage.src = ""; // Stop loading image
+});
+
+// --- Video Modal Script ---
+const videoModal = document.getElementById('videoModal');
+videoModal.addEventListener('show.bs.modal', event => {
+  const button = event.relatedTarget;
+  const videoUrl = button.getAttribute('data-video-src');
+  const videoTitle = button.getAttribute('data-video-title');
+  
+  const modalTitle = videoModal.querySelector('.modal-title');
+  const modalVideo = videoModal.querySelector('#modal-video-src');
+  
+  modalTitle.textContent = videoTitle;
+  modalVideo.src = videoUrl;
+});
+// Stop video when modal is closed
+videoModal.addEventListener('hide.bs.modal', event => {
+  const modalVideo = videoModal.querySelector('#modal-video-src');
+  modalVideo.pause();
+  modalVideo.src = ""; // Stop loading
+});
+</script>
+{% endblock %}

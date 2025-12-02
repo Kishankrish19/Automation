@@ -1,0 +1,249 @@
+{% extends "base.html" %}
+
+{% block title %}YouTube Analytics{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+  <h1 class="h2">YouTube Analytics</h1>
+  <div class="btn-toolbar mb-2 mb-md-0">
+    <div class="btn-group me-2">
+      <a href="{{ url_for('run_task', task_name='Sync YouTube Stats') }}" class="btn btn-sm btn-outline-secondary">
+        <i class="bi bi-arrow-repeat"></i> Sync Now
+      </a>
+    </div>
+    <span class="text-muted small align-self-center">Last Updated: {{ last_updated }}</span>
+  </div>
+</div>
+
+{% if not channels %}
+<div class="alert alert-warning">
+    No analytics data found. Please run the <strong>"Sync YouTube Stats"</strong> task first.
+</div>
+{% else %}
+
+<ul class="nav nav-tabs mb-4" id="channelTabs" role="tablist">
+  {% for cat_name, data in channels.items() %}
+  <li class="nav-item" role="presentation">
+    <button class="nav-link {% if loop.first %}active{% endif %}" id="tab-{{ loop.index }}" data-bs-toggle="tab" data-bs-target="#content-{{ loop.index }}" type="button" role="tab">
+        <img src="{{ data.info.thumbnail }}" class="rounded-circle me-2" style="width: 20px; height: 20px;">
+        {{ cat_name }}
+    </button>
+  </li>
+  {% endfor %}
+</ul>
+
+<div class="tab-content" id="channelTabsContent">
+  {% for cat_name, data in channels.items() %}
+  <div class="tab-pane fade {% if loop.first %}show active{% endif %}" id="content-{{ loop.index }}" role="tabpanel">
+    
+    <div class="row g-4 mb-4">
+        <div class="col-md-3">
+            <div class="card shadow-sm border-start border-4 border-primary h-100">
+                <div class="card-body">
+                    <h6 class="text-muted text-uppercase mb-2">Subscribers</h6>
+                    <h2 class="mb-0">{{ "{:,}".format(data.info.subs|int) }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card shadow-sm border-start border-4 border-success h-100">
+                <div class="card-body">
+                    <h6 class="text-muted text-uppercase mb-2">Total Views</h6>
+                    <h2 class="mb-0">{{ "{:,}".format(data.info.views|int) }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card shadow-sm border-start border-4 border-warning h-100">
+                <div class="card-body">
+                    <h6 class="text-muted text-uppercase mb-2">Watch Time (28 Days)</h6>
+                    <h2 class="mb-0">{{ data.analytics.total_watch_time_hours }} <span class="fs-6 text-muted">Hrs</span></h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card shadow-sm border-start border-4 border-info h-100">
+                <div class="card-body">
+                    <h6 class="text-muted text-uppercase mb-2">Total Videos</h6>
+                    <h2 class="mb-0">{{ data.info.video_count }}</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card shadow-sm mb-4 border-0 bg-white">
+    <div class="card-body">
+        <div class="row align-items-center">
+            <div class="col-md-3">
+                <h5 class="mb-0 text-muted"><i class="bi bi-cpu-fill me-2"></i>Daily API Quota</h5>
+                <small class="text-muted">Resets at Midnight (PT)</small>
+            </div>
+            <div class="col-md-6">
+                <div class="progress" style="height: 25px;">
+                    <div class="progress-bar 
+                        {% if quota.percent > 90 %}bg-danger
+                        {% elif quota.percent > 70 %}bg-warning
+                        {% else %}bg-success{% endif %}" 
+                        role="progressbar" 
+                        style="width: '{{ quota.percent }}%';"
+                        aria-valuenow="{{ quota.percent }}" aria-valuemin="0" aria-valuemax="100">
+                        {{ quota.used }} / 10,000 Units
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 text-end">
+                <div class="badge bg-light text-dark border p-2">
+                    <i class="bi bi-film me-1"></i> {{ quota.uploads_left }} Uploads Left
+                </div>
+                <div class="badge bg-light text-dark border p-2 ms-1">
+                    <i class="bi bi-arrow-repeat me-1"></i> {{ quota.syncs_left }} Syncs Left
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <div class="card shadow-sm mb-4">
+        <div class="card-header">
+            <h5 class="mb-0">Performance (Last 28 Days)</h5>
+        </div>
+        <div class="card-body">
+            <canvas id="chart-{{ loop.index }}" style="max-height: 300px;"></canvas>
+        </div>
+    </div>
+
+    <div class="card shadow-sm">
+        <div class="card-header">
+            <h5 class="mb-0">Recent Uploads</h5>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th>Video</th>
+                        <th>Published</th>
+                        <th>Status</th>
+                        <th>Views</th>
+                        <th>Likes</th>
+                        <th>Comments</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for video in data.videos %}
+                    <tr>
+                        <td style="min-width: 250px;">
+                            <div class="d-flex align-items-center">
+                                <img src="{{ video.thumbnail }}" class="rounded me-3" style="width: 60px; height: auto;">
+                                <div>
+                                    <a href="{{ video.url }}" target="_blank" class="text-decoration-none fw-bold text-dark text-truncate d-block" style="max-width: 300px;">
+                                        {{ video.title }}
+                                    </a>
+                                </div>
+                            </div>
+                        </td>
+                        <td>{{ video.published[:10] }}</td>
+                        <td>
+                            {% if video.privacy == 'public' %}
+                                <span class="badge bg-success">Public</span>
+                            {% elif video.privacy == 'private' %}
+                                <span class="badge bg-secondary">Private</span>
+                            {% else %}
+                                <span class="badge bg-warning text-dark">{{ video.privacy }}</span>
+                            {% endif %}
+                        </td>
+                        <td>{{ "{:,}".format(video.views|int) }}</td>
+                        <td>{{ "{:,}".format(video.likes|int) }}</td>
+                        <td>{{ video.comments }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+  </div>
+  {% endfor %}
+</div>
+{% endif %}
+{% endblock %}
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script id="analytics-data-payload" type="application/json">
+[
+    {% for cat_name, data in channels.items() %}
+    {
+        "id": "chart-{{ loop.index }}",
+        "rawData": {{ data.analytics.chart_data | default([]) | tojson }}
+    }{% if not loop.last %},{% endif %}
+    {% endfor %}
+]
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const payloadElement = document.getElementById('analytics-data-payload');
+        const allChartsData = JSON.parse(payloadElement.textContent);
+
+        allChartsData.forEach(chartConfig => {
+            const ctx = document.getElementById(chartConfig.id).getContext('2d');
+            const dataPoints = chartConfig.rawData;
+
+            // Handle empty data case gracefully
+            if (!dataPoints || dataPoints.length === 0) {
+                // Determine if we are in error state or just empty
+                return; // Skip rendering chart if no data
+            }
+
+            const labels = dataPoints.map(item => item.date);
+            const views = dataPoints.map(item => item.views);
+            const watchTime = dataPoints.map(item => item.watch_time);
+
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: 'Daily Views',
+                            data: views,
+                            borderColor: '#198754',
+                            backgroundColor: 'rgba(25, 135, 84, 0.1)',
+                            yAxisID: 'y',
+                            tension: 0.3,
+                            fill: true
+                        },
+                        {
+                            label: 'Watch Time (Min)',
+                            data: watchTime,
+                            borderColor: '#ffc107',
+                            backgroundColor: 'rgba(255, 193, 7, 0.1)',
+                            yAxisID: 'y1',
+                            tension: 0.3,
+                            fill: true
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    interaction: { mode: 'index', intersect: false },
+                    scales: {
+                        y: {
+                            type: 'linear',
+                            display: true,
+                            position: 'left',
+                            title: { display: true, text: 'Views' }
+                        },
+                        y1: {
+                            type: 'linear',
+                            display: true,
+                            position: 'right',
+                            grid: { drawOnChartArea: false },
+                            title: { display: true, text: 'Minutes' }
+                        }
+                    }
+                }
+            });
+        });
+    });
+</script>
+{% endblock %}

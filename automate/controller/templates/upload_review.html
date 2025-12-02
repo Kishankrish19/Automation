@@ -1,0 +1,125 @@
+{% extends "base.html" %}
+{% block title %}Review Upload{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card shadow-sm border-0">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0"><i class="bi bi-youtube me-2"></i>Review Video Details</h4>
+            </div>
+            <div class="card-body p-4">
+                
+                <form method="POST" action="{{ url_for('upload_execute') }}" id="uploadForm">
+                    <input type="hidden" name="category" value="{{ category }}">
+                    <input type="hidden" name="filename" value="{{ filename }}">
+
+                    <div class="mb-4 text-center">
+                        <span class="badge bg-secondary mb-2">{{ category }}</span>
+                        <h5 class="text-truncate">{{ filename }}</h5>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Title (Required)</label>
+                        <input type="text" class="form-control" name="title" value="{{ defaults.title }}" required maxlength="100">
+                        <div class="form-text">Max 100 characters.</div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Description</label>
+                        <textarea class="form-control" name="description" rows="6" maxlength="5000">{{ defaults.description }}</textarea>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Hashtags / Tags</label>
+                        <input type="text" class="form-control" name="tags" value="{{ defaults.tags }}">
+                        <div class="form-text">Comma separated.</div>
+                    </div>
+
+                    <hr class="my-4">
+
+                    <div class="bg-light p-3 rounded border">
+                        <h6 class="fw-bold mb-3"><i class="bi bi-sliders me-2"></i>Upload Settings</h6>
+                        
+                        <div class="mb-3 form-check form-switch">
+                            <input class="form-check-input" type="checkbox" role="switch" id="schedule_toggle" name="enable_schedule">
+                            <label class="form-check-label fw-bold" for="schedule_toggle">
+                                Schedule for Later?
+                            </label>
+                        </div>
+
+                        <div class="mb-3" id="schedule_container" style="display: none;">
+                            <label class="form-label small text-muted">Select Date & Time</label>
+                            <input type="datetime-local" class="form-control" name="schedule_time" value="{{ defaults.schedule }}">
+                            <div class="form-text text-primary"><i class="bi bi-info-circle me-1"></i> Scheduled uploads always use API for reliability.</div>
+                        </div>
+
+                        <div class="mb-3" id="visibility_container">
+                            <label class="form-label small text-muted">Visibility</label>
+                            <select class="form-select" name="privacy">
+                                <option value="private" selected>Private (Recommended)</option>
+                                <option value="public">Public</option>
+                                <option value="unlisted">Unlisted</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3" id="engine_container">
+                            <label class="form-label fw-bold">Upload Engine</label>
+                            <select class="form-select border-primary" name="upload_mode" id="upload_mode">
+                                <option value="hybrid" selected>✨ Hybrid (Selenium first, API fallback)</option>
+                                <option value="selenium_only">🤖 Selenium Only (Save Quota, No Fallback)</option>
+                                <option value="api_only">🔌 API Only (Fast, Uses Quota)</option>
+                            </select>
+                            <div class="form-text">Choose how you want to upload this video.</div>
+                        </div>
+                        
+                        <div class="form-check mt-3">
+                            <input class="form-check-input" type="checkbox" name="is_kids" id="is_kids">
+                            <label class="form-check-label" for="is_kids">Made for Kids?</label>
+                        </div>
+                    </div>
+
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
+                        <a href="{{ url_for('upload_select', category=category) }}" class="btn btn-outline-secondary me-md-2">Cancel</a>
+                        <button type="submit" class="btn btn-success btn-lg px-5" id="submitBtn">
+                            <i class="bi bi-cloud-upload-fill me-2"></i> Confirm & Upload
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    const toggle = document.getElementById('schedule_toggle');
+    const scheduleBox = document.getElementById('schedule_container');
+    const visibilityBox = document.getElementById('visibility_container');
+    const engineBox = document.getElementById('engine_container');
+    const modeSelect = document.getElementById('upload_mode');
+
+    // Logic: If Scheduling is ON, Force API mode (hide selector)
+    toggle.addEventListener('change', function() {
+        if (this.checked) {
+            scheduleBox.style.display = 'block';
+            visibilityBox.style.display = 'none';
+            engineBox.style.opacity = '0.5'; // Visual indication it's disabled
+            engineBox.style.pointerEvents = 'none';
+        } else {
+            scheduleBox.style.display = 'none';
+            visibilityBox.style.display = 'block';
+            engineBox.style.opacity = '1';
+            engineBox.style.pointerEvents = 'auto';
+        }
+    });
+
+    const form = document.getElementById('uploadForm');
+    const btn = document.getElementById('submitBtn');
+
+    form.addEventListener('submit', function() {
+        btn.disabled = true;
+        btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span> Processing...';
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,165 @@
+{% extends "base.html" %}
+
+{% block title %}Settings: {{ category_name }}{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-10 offset-md-1"> <form method="POST">
+            <div class="card shadow-sm mb-4">
+                <div class="card-header">
+                    <h1 class="h4 mb-0">Settings for Category: {{ category_name }}</h1>
+                </div>
+                <div class="card-body">
+
+                    <h5 class="card-title mb-3 border-bottom pb-2">File Paths & Directories</h5>
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-6">
+                            <label for="input_txt_file" class="form-label">Input TXT File (for Extract)</label>
+                            <input type="text" class="form-control" id="input_txt_file" name="input_txt_file" value="{{ config.get('input_txt_file', '') }}">
+                            <div class="form-text">Absolute path to the TXT file containing links/data. Leave empty if not used (e.g., Quotes).</div>
+                        </div>
+                         <div class="col-md-6">
+                            <label for="link_extractor_type" class="form-label">Link Extractor Type</label>
+                            <select class="form-select" id="link_extractor_type" name="link_extractor_type">
+                                <option value="" {% if not config.get('link_extractor_type') %}selected{% endif %}>None</option>
+                                <option value="simple" {% if config.get('link_extractor_type') == 'simple' %}selected{% endif %}>Simple (URL only)</option>
+                                <option value="name_url" {% if config.get('link_extractor_type') == 'name_url' %}selected{% endif %}>Name & URL (Separate Lines)</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="download_target_dir" class="form-label">Download Target Directory</label>
+                            <input type="text" class="form-control" id="download_target_dir" name="download_target_dir" value="{{ config.get('download_target_dir', '') }}" required>
+                             <div class="form-text">Where downloaded reels / created videos are saved before upload.</div>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="upload_source_dir" class="form-label">Upload Source Directory</label>
+                            <input type="text" class="form-control" id="upload_source_dir" name="upload_source_dir" value="{{ config.get('upload_source_dir', '') }}" required>
+                             <div class="form-text">Directory the uploader script watches for videos. Usually same as Download Target.</div>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="uploaded_dir" class="form-label">Uploaded Videos Directory</label>
+                            <input type="text" class="form-control" id="uploaded_dir" name="uploaded_dir" value="{{ config.get('uploaded_dir', '') }}" required>
+                            <div class="form-text">Where successfully uploaded videos are moved.</div>
+                        </div>
+                    </div>
+
+                     <h5 class="card-title mb-3 mt-4 border-bottom pb-2">Download Naming Scheme</h5>
+                     <div class="row g-3 mb-3">
+                        <div class="col-md-6">
+                            <label for="download_naming_scheme" class="form-label">Naming Scheme</label>
+                            <select class="form-select" id="download_naming_scheme" name="download_naming_scheme">
+                                <option value="post_key" {% if config.get('download_naming_scheme') == 'post_key' %}selected{% endif %}>Post Key (e.g., post1.mp4)</option>
+                                <option value="prefix_number" {% if config.get('download_naming_scheme') == 'prefix_number' %}selected{% endif %}>Prefix + Number (e.g., anime-001.mp4)</option>
+                                <option value="base_name" {% if config.get('download_naming_scheme') == 'base_name' %}selected{% endif %}>Base Name (e.g., 001.mp4 from creator)</option>
+                            </select>
+                            <div class="form-text">How downloaded/created videos are named in the source directory.</div>
+                        </div>
+                         <div class="col-md-6">
+                            <label for="download_prefix" class="form-label">Download Prefix (if using Prefix + Number)</label>
+                            <input type="text" class="form-control" id="download_prefix" name="download_prefix" value="{{ config.get('download_prefix', '') }}">
+                             <div class="form-text">e.g., 'anime', 'Cars'. Required if scheme is 'prefix_number'.</div>
+                        </div>
+                    </div>
+
+                    <h5 class="card-title mb-3 mt-4 border-bottom pb-2">YouTube Upload Settings</h5>
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-6">
+                             <label for="yt_category_id" class="form-label">YouTube Category ID</label>
+                             <input type="text" class="form-control" id="yt_category_id" name="yt_category_id" value="{{ config.get('yt_category_id', '') }}" required>
+                             <div class="form-text">e.g., 2=Autos, 22=People/Blogs, 24=Entertainment. <a href="https://developers.google.com/youtube/v3/docs/videoCategories/list" target="_blank">Find IDs</a></div>
+                        </div>
+                         <div class="col-md-6 d-flex align-items-center pt-4">
+                            <div class="form-check form-switch">
+                              <input class="form-check-input" type="checkbox" role="switch" id="use_ai_generator" name="use_ai_generator" {% if config.get('use_ai_generator') %}checked{% endif %}>
+                              <label class="form-check-label" for="use_ai_generator">Use Ollama AI for Title/Description/Tags?</label>
+                            </div>
+                        </div>
+                         <div class="col-12">
+                            <label for="yt_default_title" class="form-label">Default Title (Used if AI disabled or fails)</label>
+                            <input type="text" class="form-control" id="yt_default_title" name="yt_default_title" value="{{ config.get('yt_default_title', '') }}" maxlength="100">
+                        </div>
+                         <div class="col-12">
+                            <label for="yt_default_description" class="form-label">Default Description (Base for AI, fallback if AI disabled)</label>
+                            <textarea class="form-control" id="yt_default_description" name="yt_default_description" rows="5">{{ config.get('yt_default_description', '') }}</textarea>
+                        </div>
+                        <div class="col-12">
+                            <label for="yt_default_tags" class="form-label">Default Tags (Base for AI, fallback if AI disabled - one per line)</label>
+                            <textarea class="form-control" id="yt_default_tags" name="yt_default_tags" rows="5">{{ tags_display }}</textarea>
+                             <div class="form-text">These tags are combined with AI-generated tags (if enabled).</div>
+                        </div>
+                    </div>
+
+                     <h5 class="card-title mb-3 mt-4 border-bottom pb-2">Scheduling Settings (Stored in separate file)</h5>
+                     <div class="row g-3 mb-3">
+                        <div class="col-md-6 d-flex align-items-center">
+                            <div class="form-check form-switch">
+                              <input class="form-check-input" type="checkbox" role="switch" id="schedule_enabled" name="schedule_enabled" {% if schedule_config.get('schedule_enabled') %}checked{% endif %}>
+                              <label class="form-check-label" for="schedule_enabled">Enable Automatic Upload Schedule?</label>
+                            </div>
+                        </div>
+                         <div class="col-md-6">
+                             <label for="scheduled_task_name" class="form-label">Task to Schedule</label>
+                             <select class="form-select" id="scheduled_task_name" name="scheduled_task_name" required>
+                                 <option value="">-- Select Task --</option>
+                                 {% for task in tasks|sort %}
+                                  {# Only show tasks relevant to this category? (e.g., Upload tasks) #}
+                                  {% if category_name.lower() in task.lower() and 'upload' in task.lower() %}
+                                 <option value="{{ task }}" {% if schedule_config.get('scheduled_task_name') == task %}selected{% endif %}>{{ task }}</option>
+                                  {% endif %}
+                                 {% endfor %}
+                             </select>
+                             <div class="form-text">Select the 'Upload...' task for this category.</div>
+                         </div>
+                        <div class="col-md-6">
+                            <label for="schedule_start_datetime" class="form-label">Schedule Start (Your Local Time)</label>
+                            {# Use datetime-local input type #}
+                            {% set start_dt_val = schedule_config.get('schedule_start_datetime', '') | replace(' ', 'T') %}
+                            <input type="datetime-local" class="form-control" id="schedule_start_datetime" name="schedule_start_datetime" value="{{ start_dt_val }}">
+                            <div class="form-text">Format: YYYY-MM-DD HH:MM:SS (e.g., 2025-11-01 10:00:00).</div>
+                        </div>
+                         <div class="col-md-6">
+                            <label for="schedule_frequency_days" class="form-label">Frequency (Days)</label>
+                            <input type="number" class="form-control" id="schedule_frequency_days" name="schedule_frequency_days" value="{{ schedule_config.get('schedule_frequency_days', 1) }}" min="1">
+                             <div class="form-text">Run every X days (1 = daily).</div>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="schedule_timezone" class="form-label">Your Timezone</label>
+                            <select class="form-select" id="schedule_timezone" name="schedule_timezone" required>
+                                <option value="">-- Select Timezone --</option>
+                                {% for tz in timezones %}
+                                <option value="{{ tz }}" {% if schedule_config.get('schedule_timezone') == tz %}selected{% endif %}>{{ tz }}</option>
+                                {% endfor %}
+                            </select>
+                             <div class="form-text">Important for correct start time calculation.</div>
+                        </div>
+                         <div class="col-md-6">
+                             <label for="schedule_log_file" class="form-label">Schedule Log File Path</label>
+                             <input type="text" class="form-control" id="schedule_log_file" name="schedule_log_file" value="{{ config.get('schedule_log_file', '') }}" required>
+                             <div class="form-text">Path where the last run time is stored.</div>
+                        </div>
+                    </div>
+
+                    <h5 class="card-title mb-3 mt-4 border-bottom pb-2">Authentication Files</h5>
+                     <div class="row g-3 mb-3">
+                         <div class="col-md-6">
+                             <label for="client_secrets_file" class="form-label">Client Secrets File Path</label>
+                             <input type="text" class="form-control" id="client_secrets_file" name="client_secrets_file" value="{{ config.get('client_secrets_file', '') }}" required>
+                             <div class="form-text">Path to the *_client.json file for this account.</div>
+                         </div>
+                         <div class="col-md-6">
+                             <label for="token_file" class="form-label">Token File Path</label>
+                             <input type="text" class="form-control" id="token_file" name="token_file" value="{{ config.get('token_file', '') }}" required>
+                             <div class="form-text">Path where the *_token.json file is saved for this account.</div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="card-footer">
+                    <button type="submit" class="btn btn-success">Save Category Settings</button>
+                    <a href="{{ url_for('settings_overview') }}" class="btn btn-secondary">Cancel</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

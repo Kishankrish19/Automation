@@ -1,0 +1,114 @@
+/* --- Global & Body --- */
+body {
+  min-height: 100vh;
+  background-color: #f8f9fa; /* A light grey background */
+}
+
+/* --- Sidebar Layout --- */
+.sidebar {
+  width: 260px;
+  min-height: 100vh;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  background-color: #ffffff; /* Make sidebar white */
+}
+
+.main-content {
+  flex: 1;
+  padding: 2.5rem; /* More padding for the main area */
+  overflow-y: auto; /* Allow content to scroll */
+  max-height: 100vh;
+}
+
+/* --- Sidebar Links --- */
+.sidebar .nav-link {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #555; /* A softer black for text */
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  margin-bottom: 0.25rem;
+}
+
+.sidebar .nav-link .bi {
+  margin-right: 0.75rem;
+  font-size: 1.2rem;
+  vertical-align: text-bottom;
+}
+
+.sidebar .nav-link:hover {
+  background-color: #e9ecef; /* Light grey on hover */
+  color: #000;
+}
+
+.sidebar .nav-link.active {
+  background-color: #0d6efd; /* Bootstrap primary */
+  color: #fff;
+}
+
+.sidebar .nav-brand {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.sidebar .dropdown-toggle::after {
+  display: none; /* Hide default dropdown arrow */
+}
+
+/* --- Card Styling --- */
+.card {
+  border: none; /* Remove default border */
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05); /* Softer, more modern shadow */
+  border-radius: 0.75rem; /* More rounded corners */
+}
+
+.card-header {
+  border-bottom: none; /* Remove border on header */
+  background-color: #fff; /* Make header white */
+  padding: 1.25rem 1.5rem;
+  border-radius: 0.75rem 0.75rem 0 0 !important;
+}
+
+.card-body {
+  padding: 1.5rem;
+}
+
+/* --- Quotes Manager Drop Zone --- */
+.drop-zone {
+  border: 2px dashed #adb5bd;
+  border-radius: 0.5rem;
+  padding: 2rem;
+  text-align: center;
+  color: #6c757d;
+  background-color: #f8f9fa;
+  transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out;
+}
+
+.drop-zone:hover, .drop-zone.dragover {
+  background-color: #e9ecef;
+  border-color: #0d6efd;
+}
+
+.drop-zone .bi {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+/* --- Monitor Page Accordion --- */
+.accordion-button:focus {
+  box-shadow: none;
+}
+
+.accordion-button:not(.collapsed) {
+  background-color: #f8f9fa;
+  color: #000;
+}
+
+/* Add color to success/failure badges */
+.badge.bg-success {
+  background-color: #198754 !important;
+}
+.badge.bg-danger {
+  background-color: #dc3545 !important;
+}

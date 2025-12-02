@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block title %}Settings{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8 offset-md-2">
+        <div class="card shadow-sm mb-4">
+            <div class="card-header">
+                <h1 class="h4 mb-0">Automation Settings</h1>
+            </div>
+            <div class="card-body">
+                <p>Manage global settings or configure individual categories.</p>
+                <a href="{{ url_for('settings_global') }}" class="btn btn-primary mb-3">Edit Global Settings</a>
+
+                <h5 class="mt-4">Category Settings</h5>
+                {% if categories %}
+                <div class="list-group">
+                    {% for category in categories %}
+                    <a href="{{ url_for('settings_category', category_name=category) }}" class="list-group-item list-group-item-action">
+                        {{ category }}
+                    </a>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <p class="text-muted">No categories found in controller.json.</p>
+                {% endif %}
+                <hr>
+                 <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">&larr; Back to Dashboard</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

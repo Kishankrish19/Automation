@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+  <h1 class="h2">Dashboard</h1>
+</div>
+
+<div class="row">
+  {% if not modules %}
+  <div class="col">
+    <div class="alert alert-warning" role="alert">
+      No categories found. Check `controller.json` -> `categories`.
+    </div>
+  </div>
+  {% endif %}
+
+  {% for module in modules %}
+  <div class="col-lg-6 mb-4">
+    <div class="card shadow-sm h-100">
+      <div class="card-header">
+        <h2 class="h4 mb-0">{{ module.name }}</h2>
+      </div>
+      <div class="card-body">
+
+        <h5 class="card-title">Run Tasks</h5>
+        <div class="mb-3 d-flex flex-wrap gap-2">
+          {% if module.tasks %}
+            {% for task_name in module.tasks|sort %}
+              {% set icon = 'bi-play-circle' %}
+              
+              {# Detect Upload Task and Redirect to New UI #}
+              {% if 'upload' in task_name.lower() %}
+                  <a href="{{ url_for('upload_select', category=module.name) }}" class="btn btn-sm btn-success">
+                    <i class="bi bi-cloud-upload me-1"></i> Upload Video
+                  </a>
+              
+              {# Standard Tasks #}
+              {% else %}
+                  {% if 'extract' in task_name.lower() %}{% set icon = 'bi-box-arrow-in-down' %}{% endif %}
+                  {% if 'download' in task_name.lower() %}{% set icon = 'bi-download' %}{% endif %}
+                  {% if 'create' in task_name.lower() %}{% set icon = 'bi-magic' %}{% endif %}
+                  
+                  <a href="{{ url_for('run_task', task_name=task_name) }}" class="btn btn-sm btn-primary">
+                    <i class="bi {{ icon }} me-1"></i> {{ task_name }}
+                  </a>
+              {% endif %}
+            {% endfor %}
+          {% else %}
+            <p class="text-muted small">No related tasks found.</p>
+          {% endif %}
+        </div>
+
+        <hr>
+
+        <h5 class="card-title">Edit Data</h5>
+        <div class="d-flex flex-wrap gap-2">
+          {% if module.txt_file_name %}
+            <a href="{{ url_for('edit_txt', txt_task_name=module.txt_file_name) }}" class="btn btn-sm btn-outline-secondary">
+              <i class="bi bi-pencil-square me-1"></i>
+              Edit {{ module.txt_file_name }}
+            </a>
+          {% elif module.txt_file_path %}
+            <p class="text-muted small mb-0">TXT file configured but name mapping missing in controller.json -> global_settings -> txt_file_map.</p>
+          {% else %}
+            <p class="text-muted small mb-0">No related TXT file configured for this category.</p>
+          {% endif %}
+
+          {% if module.can_edit_json %}
+            <a href="{{ url_for('edit_json', category_name=module.name) }}" class="btn btn-sm btn-outline-secondary">
+              <i class="bi bi-braces me-1"></i>
+              Edit {{ module.name }} JSON (Simple)
+            </a>
+          {% else %}
+            <p class="text-muted small mb-0 mt-2">
+              (JSON editing is disabled for this category type. Edit the TXT file and run the 'Extract' task instead.)
+            </p>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+
+{% endblock %}

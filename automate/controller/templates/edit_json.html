@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block title %}Edit Simple JSON: {{ section_name }}{% endblock %}
+
+{% block content %}
+<div class="card shadow-sm">
+  <div class="card-header">
+     <h1 class="h4 mb-0">Editing Simple JSON Data for: {{ section_name }}</h1>
+  </div>
+  <div class="card-body">
+    <p class="text-muted">Enter one URL per line. This will create the simple <code>{"post1": "link", ...}</code> structure in the main controller file for this category. Only use this for categories configured with <code>"link_extractor_type": "simple"</code>.</p>
+    <form method="POST">
+      <div class="mb-3">
+        <label for="links" class="form-label">Links (one per line)</label>
+        <textarea class="form-control" id="links" name="links" rows="20">{{ links_text }}</textarea>
+      </div>
+      <button type="submit" class="btn btn-success">Save Changes to Controller</button>
+      <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">Cancel</a>
+    </form>
+  </div>
+</div>
+{% endblock %}

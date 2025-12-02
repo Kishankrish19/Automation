@@ -1,0 +1,157 @@
+{% extends "base.html" %}
+
+{% block title %}Process Monitor{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+  <h1 class="h2">Process Monitor</h1>
+</div>
+
+<div class="card shadow-sm mb-4">
+  <div class="card-header">
+    <h5 class="mb-0">Currently Running ({{ running_processes|length }})</h5>
+  </div>
+  <div class="card-body">
+    {% if not running_processes %}
+    <p class="text-muted">No tasks are currently running.</p>
+    {% else %}
+    <ul class="list-group">
+      {% for task_name, data in running_processes.items() %}
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+        <div>
+          <strong class="me-2">{{ task_name }}</strong>
+          <span class="spinner-border spinner-border-sm text-primary" role="status">
+            <span class="visually-hidden">Running...</span>
+          </span>
+        </div>
+        <div>
+          <button type="button" class="btn btn-info btn-sm me-2"
+                  data-bs-toggle="modal"
+                  data-bs-target="#logModal"
+                  data-task-name="{{ task_name }}"
+                  data-stream-url="{{ url_for('stream_log', task_name=task_name) }}">
+            <i class="bi bi-card-text me-1"></i> View Live Log
+          </button>
+
+          <a href="{{ url_for('stop_task', task_name=task_name) }}" class="btn btn-danger btn-sm"
+             onclick="return confirm('Are you sure you want to stop {{ task_name }}?')">
+            <i class="bi bi-stop-circle me-1"></i> Stop
+          </a>
+        </div>
+      </li>
+      {% endfor %}
+    </ul>
+    {% endif %}
+  </div>
+</div>
+
+<div class="card shadow-sm">
+  <div class="card-header d-flex justify-content-between align-items-center">
+    <h5 class="mb-0">Finished Job Log</h5>
+    <a href="{{ url_for('clear_log') }}" class="btn btn-secondary btn-sm" onclick="return confirm('Are you sure you want to clear the log?')">
+      <i class="bi bi-trash me-1"></i> Clear Log
+    </a>
+  </div>
+  <div class="card-body">
+    {% if not finished_log %}
+    <p class="text-muted">The job log is empty.</p>
+    {% else %}
+    <div class="accordion" id="logAccordion">
+      {% for job in finished_log %}
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="heading-{{ loop.index }}">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-{{ loop.index }}" aria-expanded="false" aria-controls="collapse-{{ loop.index }}">
+            {% if job.success %}
+              <span class="badge bg-success me-2"><i class="bi bi-check-circle-fill me-1"></i> Success</span>
+            {% else %}
+              <span class="badge bg-danger me-2"><i class="bi bi-x-circle-fill me-1"></i> Failed</span>
+            {% endif %}
+            <strong>{{ job.name }}</strong>
+          </button>
+        </h2>
+        <div id="collapse-{{ loop.index }}" class="accordion-collapse collapse" aria-labelledby="heading-{{ loop.index }}" data-bs-parent="#logAccordion">
+          <div class="accordion-body">
+            <pre><code>{{ job.output }}</code></pre>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+  </div>
+</div>
+
+
+<div class="modal fade" id="logModal" tabindex="-1" aria-labelledby="logModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="logModalLabel"><i class="bi bi-card-text me-2"></i>Live Log: <span></span></h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <pre id="modal-log-output" style="white-space: pre-wrap; word-break: break-all;">Connecting to log stream...</pre>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Global variable to hold the current EventSource
+  let currentLogStream = null;
+
+  const logModal = document.getElementById('logModal');
+  const logOutput = document.getElementById('modal-log-output');
+  const logModalLabelSpan = document.getElementById('logModalLabel').querySelector('span'); // Target the span inside
+
+  // When the modal is shown, start the log stream
+  logModal.addEventListener('show.bs.modal', function (event) {
+    const button = event.relatedTarget;
+    // *** MODIFIED: Get data-task-name ***
+    const taskName = button.getAttribute('data-task-name');
+    const streamUrl = button.getAttribute('data-stream-url');
+
+    logModalLabelSpan.textContent = taskName; // Update only the span
+    logOutput.textContent = 'Connecting to log stream...\n';
+
+    currentLogStream = new EventSource(streamUrl);
+
+    currentLogStream.onmessage = function (e) {
+      // Append data, handle closing messages
+      const message = e.data + '\n';
+      logOutput.textContent += message;
+      if (message.includes('--- TASK FINISHED OR STOPPED ---') ||
+          message.includes('--- TASK NOT FOUND ---') ||
+          message.includes('--- LOG STREAMING ERROR ---')) {
+        currentLogStream.close();
+      }
+       // Auto-scroll
+       // Use requestAnimationFrame for smoother scrolling
+       requestAnimationFrame(() => {
+            logOutput.scrollTop = logOutput.scrollHeight;
+       });
+    };
+
+    currentLogStream.onerror = function (e) {
+      logOutput.textContent += '\n--- ERROR: Lost connection to log stream. ---\n';
+      console.error('EventSource failed:', e);
+      if (currentLogStream) currentLogStream.close(); // Ensure closure on error
+    };
+  });
+
+  // When the modal is hidden, close the connection and refresh
+  logModal.addEventListener('hide.bs.modal', function (event) {
+    if (currentLogStream) {
+      currentLogStream.close();
+      currentLogStream = null;
+      console.log('Closed log stream.');
+    }
+    // Refresh the monitor page to ensure status is up-to-date
+    // Use location.replace() for cleaner history
+    window.location.replace("{{ url_for('monitor') }}");
+  });
+</script>
+{% endblock %}

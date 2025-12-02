@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block title %}Global Settings{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8 offset-md-2">
+        <form method="POST">
+            <div class="card shadow-sm mb-4">
+                <div class="card-header">
+                    <h1 class="h4 mb-0">Global Settings</h1>
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">Ollama AI Configuration</h5>
+                    <div class="mb-3">
+                        <label for="ollama_api_url" class="form-label">API URL</label>
+                        <input type="text" class="form-control" id="ollama_api_url" name="ollama_api_url" value="{{ settings.get('ollama_api_url', '') }}">
+                    </div>
+                    <div class="mb-3">
+                        <label for="ollama_model" class="form-label">Model Name</label>
+                        <input type="text" class="form-control" id="ollama_model" name="ollama_model" value="{{ settings.get('ollama_model', '') }}">
+                    </div>
+                    <div class="mb-3">
+                        <label for="ollama_timeout" class="form-label">Timeout (seconds)</label>
+                        <input type="number" class="form-control" id="ollama_timeout" name="ollama_timeout" value="{{ settings.get('ollama_timeout', 60) }}" min="1">
+                    </div>
+
+                    <hr>
+                    <h5 class="card-title">TXT File Mapping</h5>
+                    <p class="text-muted small">This section maps display names (used in UI) to actual file paths. Editing this requires careful changes.</p>
+                     <div class="mb-3">
+                        <label class="form-label">Current Mappings (Read-only)</label>
+                        <ul class="list-group">
+                        {% for name, path in settings.get('txt_file_map', {}).items() %}
+                            <li class="list-group-item small"><strong>{{ name }}:</strong> {{ path }}</li>
+                        {% else %}
+                            <li class="list-group-item small text-muted">No mappings defined.</li>
+                        {% endfor %}
+                        </ul>
+                        </div>
+
+                </div>
+                <div class="card-footer">
+                    <button type="submit" class="btn btn-success">Save Global Settings</button>
+                    <a href="{{ url_for('settings_overview') }}" class="btn btn-secondary">Cancel</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

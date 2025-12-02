@@ -1,0 +1,318 @@
+{
+  "categories": {
+    "Anime": {
+      "input_txt_file": "C:/Users/ACER/Desktop/hobby/python/automate_v2/automate/data/links_to_extract/anime_link.txt",
+      "link_extractor_type": "simple",
+      "download_target_dir": "C:/Users/ACER/Desktop/hobby/python/automate_v2/automate/data/downloaded_videos/Anime",
+      "upload_source_dir": "C:/Users/ACER/Desktop/hobby/python/automate_v2/automate/data/downloaded_videos/Anime",
+      "uploaded_dir": "C:/Users/ACER/Desktop/hobby/python/automate_v2/automate/data/uploaded_videos/Anime",
+      "download_naming_scheme": "prefix_number",
+      "download_prefix": "anime",
+      "yt_category_id": "24",
+      "yt_default_title": "Epic Anime Moments \ud83c\udfac\ud83d\udd25 #anime #otaku #amv #animeedit",
+      "yt_default_description": "\ud83d\udd25 Relive the most legendary anime moments of all time! From heart-pounding battles to emotional farewells \u2014 this is what makes anime unforgettable! \ud83c\udf8c\n\n\ud83d\udcab Subscribe to AnimeVerse for daily anime edits, AMVs, and iconic scenes that define generations of fans!\n\n\ud83d\udd14 Hit the bell to never miss a new anime drop!\n\n\ud83c\udfa5 Featuring clips inspired by top anime series.\n\ud83d\udcad Comment your favorite moment below \u2b07\ufe0f\n\u2764\ufe0f Like, Share, and Subscribe if you breathe anime!\n\n**#Anime #AMV #Otaku #AnimeEdit #Naruto #OnePiece #AttackOnTitan #DemonSlayer #Bleach #JujutsuKaisen #MyHeroAcademia #TokyoGhoul #DragonBallZ #ChainsawMan #OnePunchMan #DeathNote #FullmetalAlchemist #HunterxHunter #AnimeFan #AnimeLover #AnimeScene #AnimeCommunity #EpicMoments #AnimeLife #Weeb #AnimeWorld #AnimeVibes**",
+      "yt_default_tags": [
+        "Anime",
+        "AMV",
+        "Otaku",
+        "AnimeEdit",
+        "Naruto",
+        "OnePiece",
+        "AttackOnTitan",
+        "DemonSlayer",
+        "Bleach",
+        "JujutsuKaisen",
+        "MyHeroAcademia",
+        "TokyoGhoul",
+        "DragonBallZ",
+        "ChainsawMan",
+        "OnePunchMan",
+        "DeathNote",
+        "FullmetalAlchemist",
+        "HunterxHunter",
+        "AnimeFan",
+        "AnimeLover",
+        "AnimeScene",
+        "AnimeCommunity",
+        "EpicMoments",
+        "AnimeLife",
+        "Weeb",
+        "AnimeWorld",
+        "AnimeVibes"
+      ],
+      "use_ai_generator": false,
+      "schedule_log_file": "C:/Users/ACER/Desktop/hobby/python/automate_v2/automate/data/schedule_logs/anime_schedule.json",
+      "token_file": "C:/Users/ACER/Desktop/hobby/python/automate_v2/automate/credentials/anime_token.json",
+      "client_secrets_file": "C:/Users/ACER/Desktop/hobby/python/automate_v2/automate/credentials/anime_client.json"
+    },
+    "Cars": {
+      "input_txt_file": "C:/Users/ACER/Desktop/hobby/python/automate_v2/automate/data/links_to_extract/car_link.txt",
+      "link_extractor_type": "simple",
+      "download_target_dir": "C:/Users/ACER/Desktop/hobby/python/automate_v2/automate/data/downloaded_videos/Cars",
+      "upload_source_dir": "C:/Users/ACER/Desktop/hobby/python/automate_v2/automate/data/downloaded_videos/Cars",
+      "uploaded_dir": "C:/Users/ACER/Desktop/hobby/python/automate_v2/automate/data/uploaded_videos/Cars",
+      "download_naming_scheme": "prefix_number",
+      "download_prefix": "Cars",
+      "yt_category_id": "2",
+      "yt_default_title": "Epic Car Edits \ud83d\ude97\ud83d\udca8 #carlover #supercars #carcommunity #automotive #carshorts",
+      "yt_default_description": "\ud83c\udfce\ufe0f Feel the adrenaline rush with the most stunning car edits and cinematic driving moments!\nFrom roaring engines to sleek drifts \u2014 this is where power meets perfection. \ud83d\udca8\n\n\ud83d\udcab Subscribe to **AutoVerse** for daily car edits, cinematic shots, and the ultimate automotive vibes!\n\n\ud83d\udd14 Turn on notifications for your daily dose of horsepower and speed.\n\n\ud83d\ude97 Featuring clips inspired by iconic supercars, JDM legends, and muscle beasts.\n\ud83d\udcad Comment your dream car below \u2b07\ufe0f\n\u2764\ufe0f Like, Share, and Subscribe if cars are your passion!\n\n**#Cars #Supercars #JDM #CarEdits #CarLover #Automotive #CarCommunity #Drift #CarCulture #ModifiedCars #CarScene #CarMeet #Speed #LuxuryCars #SportsCars #Tuning #CarPhotography #CarLife #FastCars #CarReels #CarShorts #CarEnthusiast #CarVibes #AutoVerse #CarPassion #Turbo #V8 #CarGoals**",
+      "yt_default_tags": [
+        "Cars",
+        "Supercars",
+        "JDM",
+        "CarEdits",
+        "CarLover",
+        "Automotive",
+        "CarCommunity",
+        "Drift",
+        "CarCulture",
+        "ModifiedCars",
+        "CarScene",
+        "CarMeet",
+        "Speed",
+        "LuxuryCars",
+        "SportsCars",
+        "Tuning",
+        "CarPhotography",
+        "CarLife",
+        "FastCars",
+        "CarReels",
+        "CarShorts",
+        "CarEnthusiast",
+        "CarVibes",
+        "AutoVerse",
+        "CarPassion",
+        "Turbo",
+        "V8",
+        "CarGoals"
+      ],
+      "use_ai_generator": false,
+      "schedule_log_file": "C:/Users/ACER/Desktop/hobby/python/automate_v2/automate/data/schedule_logs/cars_schedule.json",
+      "token_file": "C:/Users/ACER/Desktop/hobby/python/automate_v2/automate/credentials/cars_token.json",
+      "client_secrets_file": "C:/Users/ACER/Desktop/hobby/python/automate_v2/automate/credentials/cars_client.json"
+    },
+    "Entertopia": {
+      "input_txt_file": "C:/Users/ACER/Desktop/hobby/python/automate_v2/automate/data/links_to_extract/Entertopia.txt",
+      "link_extractor_type": "name_url",
+      "download_target_dir": "C:/Users/ACER/Desktop/hobby/python/automate_v2/automate/data/downloaded_videos/Entertopia",
+      "upload_source_dir": "C:/Users/ACER/Desktop/hobby/python/automate_v2/automate/data/downloaded_videos/Entertopia",
+      "uploaded_dir": "C:/Users/ACER/Desktop/hobby/python/automate_v2/automate/data/uploaded_videos/Entertopia",
+      "download_naming_scheme": "post_key",
+      "download_prefix": null,
+      "yt_category_id": "24",
+      "yt_default_title": "Kannada Entertainment Highlights \u2728",
+      "yt_default_description": "\ud83c\udf89 Dive into the best of Kannada entertainment \u2014 from comedy skits and lifestyle vlogs to trending reels and desi fun! \ud83c\uddee\ud83c\uddf3\n\n\ud83d\udcab Subscribe for daily uploads!",
+      "yt_default_tags": [
+        "Kannada",
+        "Entertainment",
+        "Karnataka",
+        "KannadaReels",
+        "SouthIndia",
+        "Shorts",
+        "YTShorts",
+        "KannadaShorts",
+        "Viral"
+      ],
+      "use_ai_generator": true,
+      "schedule_log_file": "C:/Users/ACER/Desktop/hobby/python/automate_v2/automate/data/schedule_logs/entertopia_schedule.json",
+      "token_file": "C:/Users/ACER/Desktop/hobby/python/automate_v2/automate/credentials/entertopia_token.json",
+      "client_secrets_file": "C:/Users/ACER/Desktop/hobby/python/automate_v2/automate/credentials/entertopia_client.json"
+    },
+    "Quotes": {
+      "input_txt_file": "C:/Users/ACER/Desktop/hobby/python/automate_v2/automate/data/links_to_extract/quotes_links.txt",
+      "link_extractor_type": null,
+      "download_target_dir": "C:/Users/ACER/Desktop/hobby/python/automate_v2/automate/data/downloaded_videos/Quotes",
+      "upload_source_dir": "C:/Users/ACER/Desktop/hobby/python/automate_v2/automate/data/downloaded_videos/Quotes",
+      "uploaded_dir": "C:/Users/ACER/Desktop/hobby/python/automate_v2/automate/data/uploaded_videos/Quotes",
+      "download_naming_scheme": "base_name",
+      "download_prefix": null,
+      "yt_category_id": "22",
+      "yt_default_title": "Inspiroq quotes #dailyquotes #quotes #innerresilience #emotionaldistress",
+      "yt_default_description": "\ud83c\udf1f Have you turned your courage into a new beginning? Share your story below \u2b07\ufe0f\n\n\ud83d\udcab Subscribe to Inspiroque for daily wisdom...\n\n**#Courage #NewBeginnings #HealingQuotes #InspirationalQuotes #Motivation #SelfLove #Heartbreak #Recovery ...**",
+      "yt_default_tags": [
+        "Courage",
+        "NewBeginnings",
+        "HealingQuotes",
+        "InspirationalQuotes",
+        "Motivation",
+        "SelfLove",
+        "Heartbreak",
+        "Recovery",
+        "EmotionalHealing",
+        "SelfGrowth",
+        "MindsetShift",
+        "Inspiration",
+        "DailyQuotes",
+        "LifeQuotes",
+        "PersonalDevelopment",
+        "Empowerment",
+        "PositiveMindset",
+        "QuoteOfTheDay",
+        "BelieveInYourself",
+        "GrowthMindset",
+        "OvercomingPain",
+        "InnerStrength",
+        "SelfCompassion",
+        "MovingForward",
+        "LifeLessons",
+        "Resilience",
+        "Hope"
+      ],
+      "use_ai_generator": false,
+      "schedule_log_file": "C:/Users/ACER/Desktop/hobby/python/automate_v2/automate/data/schedule_logs/quotes_schedule.json",
+      "token_file": "C:/Users/ACER/Desktop/hobby/python/automate_v2/automate/credentials/quotes_token.json",
+      "client_secrets_file": "C:/Users/ACER/Desktop/hobby/python/automate_v2/automate/credentials/quotes_client.json"
+    }
+  },
+  "global_settings": {
+    "ollama_api_url": "http://localhost:11434/api/generate",
+    "ollama_model": "qwen2.5-coder:latest",
+    "ollama_timeout": 60,
+    "system_health": "GREEN",
+    "last_selenium_failure": null,
+    "analytics_cache_file": "C:/Users/ACER/Desktop/hobby/python/automate_v2/automate/data/youtube_stats_cache.json",
+    "txt_file_map": {
+      "Edit Anime Links Txt": "C:/Users/ACER/Desktop/hobby/python/automate_v2/automate/data/links_to_extract/anime_link.txt",
+      "Edit Cars Links Txt": "C:/Users/ACER/Desktop/hobby/python/automate_v2/automate/data/links_to_extract/car_link.txt",
+      "Edit Entertopia Links Txt": "C:/Users/ACER/Desktop/hobby/python/automate_v2/automate/data/links_to_extract/Entertopia.txt",
+      "Edit Quotes Links Txt": "C:/Users/ACER/Desktop/hobby/python/automate_v2/automate/data/links_to_extract/quotes_links.txt"
+    }
+  },
+  "tasks": {
+    "Extract Anime Links": {
+      "script": "scripts/extract_links.py",
+      "args": [
+        "--category",
+        "Anime"
+      ]
+    },
+    "Download Anime Reels": {
+      "script": "scripts/download_reels.py",
+      "args": [
+        "--category",
+        "Anime"
+      ]
+    },
+    "Upload Anime Videos": {
+      "script": "scripts/upload_to_youtube.py",
+      "args": [
+        "--category",
+        "Anime"
+      ]
+    },
+    "Extract Cars Links": {
+      "script": "scripts/extract_links.py",
+      "args": [
+        "--category",
+        "Cars"
+      ]
+    },
+    "Download Cars Reels": {
+      "script": "scripts/download_reels.py",
+      "args": [
+        "--category",
+        "Cars"
+      ]
+    },
+    "Upload Cars Videos": {
+      "script": "scripts/upload_to_youtube.py",
+      "args": [
+        "--category",
+        "Cars"
+      ]
+    },
+    "Extract Entertopia Links": {
+      "script": "scripts/extract_links.py",
+      "args": [
+        "--category",
+        "Entertopia"
+      ]
+    },
+    "Download Entertopia Reels": {
+      "script": "scripts/download_reels.py",
+      "args": [
+        "--category",
+        "Entertopia"
+      ]
+    },
+    "Upload Entertopia Videos": {
+      "script": "scripts/upload_to_youtube.py",
+      "args": [
+        "--category",
+        "Entertopia"
+      ]
+    },
+    "Create Quotes Videos": {
+      "script": "scripts/create_videos.py",
+      "args": [
+        "--input-json",
+        "C:/Users/ACER/Desktop/hobby/python/automate_v2/automate/data/quote_creator_inputs/input_quotes.json",
+        "--image-dir",
+        "C:/Users/ACER/Desktop/hobby/python/automate_v2/automate/data/quote_creator_inputs/input_images",
+        "--audio-dir",
+        "C:/Users/ACER/Desktop/hobby/python/automate_v2/automate/data/quote_creator_inputs/input_audio",
+        "--output-dir",
+        "C:/Users/ACER/Desktop/hobby/python/automate_v2/automate/data/downloaded_videos/Quotes",
+        "--ffmpeg-path",
+        "C:/Users/ACER/Downloads/ffmpeg-8.0-essentials_build/bin/ffmpeg.exe",
+        "--include-author",
+        "--scale",
+        "1080:1920",
+        "--duration",
+        "15"
+      ]
+    },
+    "Upload Quotes Videos": {
+      "script": "scripts/upload_to_youtube.py",
+      "args": [
+        "--category",
+        "Quotes"
+      ]
+    },
+    "Sync YouTube Stats": {
+      "script": "scripts/fetch_analytics.py",
+      "args": []
+    },
+    "Setup Anime Login": {
+      "script": "scripts/setup_profiles.py",
+      "args": [
+        "Anime"
+      ]
+    },
+    "Setup Cars Login": {
+      "script": "scripts/setup_profiles.py",
+      "args": [
+        "Cars"
+      ]
+    },
+    "Setup Entertopia Login": {
+      "script": "scripts/setup_profiles.py",
+      "args": [
+        "Entertopia"
+      ]
+    },
+    "Setup Quotes Login": {
+      "script": "scripts/setup_profiles.py",
+      "args": [
+        "Quotes"
+      ]
+    }
+  },
+  "json_data": {
+    "Anime": {
+      "post1": "https://www.instagram.com/reel/DEwdK_Oyx41/?igsh=MTd1cWVyeGdybnFqNw==",
+      "post2": "https://www.instagram.com/reel/DPRVkmgCALz/?igsh=ZDlxNGl4ZnR1eG4y",
+      "post3": "https://www.instagram.com/reel/DLWMH4wILGd/?igsh=enB2MDZ6NTZkYmw2",
+      "post4": "https://www.instagram.com/reel/DLaDPNvS7SE/?igsh=MXZibWw4Y2FsZWU2Nw==",
+      "post5": "https://www.instagram.com/reel/DPT9H5xD0gU/?igsh=MWE5OXpqZnhpOHZ6OQ=="
+    },
+    "Cars": {},
+    "Entertopia": {
+      "post1": {
+        "url": "https://www.instagram.com/reel/DPrUXiSEjwW/?igsh=ZXE4OWd0NW9pdzkx",
+        "name": "big boss kannada"
+      }
+    },
+    "Quotes": {}
+  }
+}
