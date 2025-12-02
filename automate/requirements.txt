@@ -1,0 +1,12 @@
+Flask
+requests
+google-api-python-client
+google-auth-oauthlib
+google-auth-httplib2
+instaloader
+beautifulsoup4
+tqdm
+Pillow
+rich
+selenium
+webdriver-manager

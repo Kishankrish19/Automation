@@ -1,0 +1,29 @@
+Set-Content .gitignore @"
+# --- Security: NEVER COMMIT THESE ---
+**/credentials/*.json
+**/scripts/session-*
+**/data/browser_profiles/
+**/client_secrets.json
+
+# --- Large Media Files ---
+**/data/downloaded_videos/*
+**/data/uploaded_videos/*
+**/data/quote_creator_inputs/input_images/*
+**/data/quote_creator_inputs/input_audio/*
+
+# --- Python Cache & Environment ---
+__pycache__/
+*.pyc
+venv/
+env/
+.env
+
+# --- Logs ---
+**/controller/running_logs/*
+**/data/schedule_logs/*.json
+**/quota_log.json
+
+# --- OS Specific ---
+.DS_Store
+Thumbs.db
+"@
